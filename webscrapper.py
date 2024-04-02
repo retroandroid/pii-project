@@ -107,10 +107,11 @@ def itemstorer():
         sub.append(humid)
         #precipitation
         sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
-        sub.append(int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100)))
+        feellikeheat=int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
+        sub.append(feellikeheat)
         sub.append(int(x[i].replace(",","")))
+        sub.append(fahrenheit_to_celcius(feellikeheat))
+        
         b.write(str(sub)+"\n")
     b.close()
 itemstorer()
-with open('base.txt','r') as b:
-    print(b.read())
