@@ -109,8 +109,8 @@ def itemstorer():
         sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
         feellikeheat=int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
         sub.append(feellikeheat)
-        sub.append(int(x[i].replace(",","")))
         sub.append(fahrenheit_to_celcius(feellikeheat))
+        sub.append(int(x[i].replace(",","")))
         
         b.write(str(sub)+"\n")
     b.close()
