@@ -111,5 +111,3 @@ def itemstorer():
         b.write(str(sub)+"\n")
     b.close()
 itemstorer()
-with open('base.txt','r') as b:
-    print(b.read())
