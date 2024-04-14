@@ -85,12 +85,11 @@ def populationextractor():
     baalbakpop=listy[11][3]
     beirutpop=listy[14][3]
     bqaapop=listy[2][3]
-    keserwanpop=listy[16][3]
     matnpop=listy[18][3]
     nabatiehpop=listy[6][3]
     tripolipop=listy[27][3]
     sidonpop=listy[23][3]
-    pops=[akkarpop,baalbakpop,beirutpop,bqaapop,keserwanpop,matnpop,nabatiehpop,tripolipop,sidonpop]
+    pops=[akkarpop,baalbakpop,beirutpop,bqaapop,matnpop,nabatiehpop,tripolipop,sidonpop]
     return pops
 #this generates the list used in database
 def itemstorer():
@@ -106,7 +105,9 @@ def itemstorer():
         sub.append(humid)
         #precipitation
         sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
-        sub.append(int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100)))
+        heat_index1 = int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
+        sub.append(heat_index1)
+        sub.append(int(fahrenheit_to_celcius(heat_index1)))
         sub.append(int(x[i].replace(",","")))
         b.write(str(sub)+"\n")
     b.close()
