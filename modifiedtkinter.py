@@ -71,7 +71,7 @@ uplabel.configure(background="#F6FAFE")
 uplabel.place(relx=0.5, rely=0, anchor='center')
 # Bind the resize_image function to the <Configure> event of the window
 
-coordinates = [(0.81, 0.18), (0.75, 0.27), (0.82, 0.4), (0.68, 0.5), (0.73, 0.61), (0.65, 0.745), (0.58, 0.76)]
+coordinates = [(0.81, 0.18), (0.75, 0.27), (0.82, 0.4), (0.64, 0.55), (0.73, 0.61), (0.65, 0.745), (0.58, 0.76)]
 buttons_text = ['akkar','Tripoli','Baalbak','Mount Lebanon','bqaa','Nabatiye','Saida']
 
 
