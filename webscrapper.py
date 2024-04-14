@@ -1,117 +1,101 @@
-import aiohttp
-import asyncio
-from bs4 import BeautifulSoup
-#max amount of connections
-concurrent = 10
-#function for fetching html file for a single url
-async def fetch(session, url):
-    try:
-        async with session.get(url, timeout=10) as response:
-            return await response.text()
-    except Exception as e:
-        # Replace with proper logging
-        print(f"Error fetching {url}: {e}")
-        return None
-#and this is the main function to request request from all the urls and limit connections
-async def main(urls, max_connections):
-    connector = aiohttp.TCPConnector(limit_per_host=max_connections)
-    async with aiohttp.ClientSession(connector=connector) as session:
-        tasks = [fetch(session, url) for url in urls]
-        responses = await asyncio.gather(*tasks)
-        return responses
-urls=["https://weather.com/weather/tenday/l/1c31b8d17f1edca64ebd5613a3687778e56a55a8f2a8355194cb92b043cbaba9",
-          "https://weather.com/weather/tenday/l/9da454d4593cabaf7c79c1c7ea5793f5dfd5871abda4aa41108a3729d4f01bbc",
-          "https://weather.com/weather/tenday/l/6f1fb241e273f7a89ecfb63affce79ad89d7f21533a86b0a25d3308497d740c7",
-          "https://weather.com/weather/tenday/l/Beirut+Lebanon+LEXX0003",
-          "https://weather.com/weather/tenday/l/705a547e74b988a5c58785c544330ffebb6057d681d0ad48d5311bb124a43fd5",
-          "https://weather.com/weather/tenday/l/e9247f409825545784ff33963cb22a7ab8af198ea7614cf8f86a0fe26b134a1a",
-          "https://weather.com/weather/tenday/l/7bda8dfca67cb6b67db19bd0ab50c2fc11ee887db37fbcb506378802ba4e1439",
-          "https://weather.com/weather/tenday/l/f8c98fe3df5687a07c345db49cef0d71bd40551b1610e59db509ccc9cc1cbe93",
-          "https://weather.com/weather/tenday/l/edeeab195618720ffcab57b14c6ea9f839c0cdb80746de959c96327ffcea075d",
-          "https://www.citypopulation.de/en/lebanon/admin/"
-    ]
-weather_data = asyncio.run(main(urls, concurrent))
-akkar_soup=""
-baalbak_soup=""
-beirut_soup=""
-bqaa_soups=""
-keserwan_soups=""
-matn_soup=""
-nabatieh_soup=""
-tripoli_soup=""
-sidon_soup=""
-populations=""
-#list containing all the part names
-tempsoups=[akkar_soup,baalbak_soup,beirut_soup,bqaa_soups,keserwan_soups,matn_soup,nabatieh_soup,tripoli_soup,sidon_soup,populations]
-names=["akaar","baalbak","beirut","bqaa","keserwan","matn",'nabatieh','tripoli','sidon']
-#converting them to soups(using the lxml library so that i can access them easily)
-for data in range(len(weather_data)):
-    tempsoups[data]=BeautifulSoup(weather_data[data],'lxml')
-#temp converter
-def fahrenheit_to_celcius(x):
-    return int((x-32)*(5/9))
-#feels like temp
-def heat_index(temp,humid):
-    c1 = -42.379
-    c2 = 2.04901523
-    c3 = 10.14333127
-    c4 = -0.22475541
-    c5 = -6.83783e-03
-    c6 = -5.481717e-02
-    c7 = 1.22874e-03
-    c8 = 8.5282e-04
-    c9 = -1.99e-06
-    x=(c1
-    + (c2 * temp)
-    + (c3 * humid)
-    + (c4 * temp * humid)
-    + (c5 * temp ** 2)
-    + (c6 * humid ** 2)
-    + (c7 * (temp ** 2) * humid)
-    + (c8 * temp * (humid ** 2))
-    + (c9 * (temp ** 2) *( humid ** 2)))
-    return x
-def populationextractor():
-    population=tempsoups[-1].find_all('td', class_='rpop')
-    listy=[]
-    x=0
-    for i in population:
-        if x==4:
-            x=0
-        if x==0:
-            listy.append([])
-        listy[-1].append(i.text)
-        x+=1
-    akkarpop=listy[0][3]
-    baalbakpop=listy[11][3]
-    beirutpop=listy[14][3]
-    bqaapop=listy[2][3]
-    keserwanpop=listy[16][3]
-    matnpop=listy[18][3]
-    nabatiehpop=listy[6][3]
-    tripolipop=listy[27][3]
-    sidonpop=listy[23][3]
-    pops=[akkarpop,baalbakpop,beirutpop,bqaapop,keserwanpop,matnpop,nabatiehpop,tripolipop,sidonpop]
-    return pops
-#this generates the list used in database
-def itemstorer():
-    x=populationextractor()
-    b=open('base.txt','w')
-    for i in range(len(tempsoups)-1):
-        sub=[]
-        sub.append(names[i])
-        temp=tempsoups[i].find('span',class_="DailyContent--temp--1s3a7 DailyContent--tempN--33RmW").text
-        sub.append(temp)
-        sub.append(str(fahrenheit_to_celcius(int(temp[0:-1])))+"°")
-        humid=tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text
-        sub.append(humid)
-        #precipitation
-        sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
-        feellikeheat=int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
-        sub.append(feellikeheat)
-        sub.append(fahrenheit_to_celcius(feellikeheat))
-        sub.append(int(x[i].replace(",","")))
-        
-        b.write(str(sub)+"\n")
-    b.close()
-itemstorer()
+from tkinter import ttk
+from PIL import Image, ImageTk
+import ttkbootstrap as tb
+import threading
+
+# Create the root window
+# Create the root window
+root = tb.Window(themename="morph")
+root.resizable(False, False)
+root.geometry('1920x1080')
+root.configure(bg='#F6FAFE')
+image_label = None
+text_label = []
+last_button = None
+resize_id = None
+def update_color(event, label):
+    for lbl in labels:
+        if lbl != label:
+            lbl.config(style="Black.TLabel")  # Reset other labels
+    if style.lookup(label.cget('style'), 'foreground') == 'black':
+        label.config(style="Red.TLabel")  # Change to your desired color
+    else:
+        label.config(style="Black.TLabel")  # Change to default color'''
+def on_button_click(button):
+    # Destroy the old frame
+    global image_label,text_label,last_button
+    if image_label is not None and (button == last_button or button!=last_button):
+        image_label.destroy()
+        image_label = None
+        for label in text_label:
+            label.destroy()
+        text_label = []
+    if button == last_button:
+        last_button = None
+        return
+    last_button = button
+    recimage = Image.open("Rectangle 2.png")  # Resize to 200x200
+    recimage = recimage.resize((600, 500), Image.BILINEAR)
+    photo_image = ImageTk.PhotoImage(recimage)
+    image_label = ttk.Label(root, image=photo_image)
+    image_label.image = photo_image  # Keep a reference to the image
+    image_label.configure(background="#F6FAFE")
+# Create a label for the image and place it in the frame
+    image_label.place(relx=0.25, rely =0.35, anchor='center')
+# ...
+
+# Initialize the previous size of the window
+prev_width = root.winfo_width()
+prev_height = root.winfo_height()
+'''for index, item in enumerate(data):
+        label = ttk.Label(root, text=item)
+        label.config(font=("Courier", 14), fg="blue", bg="#dce3f3", padx=10, pady=10, anchor="w")
+        label.place(x = 100, y = 100+30*index)
+        text_label.append(label)'''
+
+
+# Load the image
+image = Image.open("pngtree-grey-lebanon-map-district-province-city-vector-picture-image_9437234.png")
+image=image.resize((800, 800), Image.BILINEAR)
+photo_image1 = ImageTk.PhotoImage(image)
+image_label1 = ttk.Label(root, image=photo_image1)
+image_label1.configure(background="#F6FAFE")
+image_label1.place(relx=0.75, rely=0.5, anchor='center') 
+# Create a label for the image and place it at the top right
+label = tb.Label(root)
+label.configure(background="#F6FAFE")
+label.place(relx=0.75, rely=0.5, anchor='center')
+upbar=Image.open("Rectangle 1.png")
+uplabel=tb.Label(root)
+uplabel.configure(background="#F6FAFE")
+uplabel.place(relx=0.5, rely=0, anchor='center')
+# Bind the resize_image function to the <Configure> event of the window
+
+coordinates = [(0.81, 0.18), (0.75, 0.27), (0.82, 0.4), (0.64, 0.55), (0.73, 0.61), (0.65, 0.745), (0.58, 0.76)]
+buttons_text = ['akkar','Tripoli','Baalbak','Mount Lebanon','bqaa','Nabatiye','Saida']
+
+
+# Create a list to store the label variables
+labels = []
+# Create a style
+style = tb.Style()
+style.configure("Red.TLabel", foreground="#FFFFFF", background="#d0d4d5")
+style.configure("Black.TLabel", foreground="black", background="#d0d4d5")
+for i, ((x, y), text) in enumerate(zip(coordinates, buttons_text)):
+    # Create the label with the "Black.TLabel" style
+    label1 = tb.Label(root, text=text, style="Black.TLabel", font=("Quincy", 16))
+
+    # Bind the update_color function to the label click event
+    label1.bind("<Button-1>", lambda event,lbl = label1: (update_color(event,lbl),on_button_click(lbl)))
+    label1.place(relx=x, rely=y)
+
+    # Add the label to the list
+    labels.append(label1)
+label2 = tb.Label(root, text='beirut', style="Black.TLabel", font=("Quincy", 16))
+label2.bind("<Button-1>", lambda event,lbl2 = label2:(update_color(event,lbl2),on_button_click(lbl2)))
+label2.place(relx=0.6, rely=0.5)
+label2.config(background="#F6FAFE")
+labels.append(label2)
+
+# Call the resize_image function manually to resize the image to fit the window
+root.mainloop()
