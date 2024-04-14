@@ -16,14 +16,14 @@ c.execute('DROP TABLE IF EXISTS stats')
 
 stats = """
     CREATE TABLE IF NOT EXISTS stats(
-    city TEXT,
-    temp_in_F TEXT,
-    temp_in_C TEXT,
-    humidity TEXT,
-    chance_of_precipitation TEXT,
-    heat_index_in_F INTEGER,
-    heat_index_in_C INTEGER,
-    population INTEGER
+    'City' TEXT,
+    'Temperature in Fahrenheit' TEXT,
+    'Temperature in Celcius' TEXT,
+    'Humidity' TEXT,
+    'Chance of Precipitation' TEXT,
+    'Heat Index in Fahrenheit' INTEGER,
+    'Heat Index in Celcius' INTEGER,
+    'Population' INTEGER
 );"""
 
 c.execute(stats)
@@ -31,3 +31,14 @@ c.executemany('INSERT INTO stats VALUES (?,?,?,?,?,?,?,?)',data)
 
 connection.commit()
 connection.close()
+
+def load_data(city):
+    connection = sqlite3.connect('temps.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM stats WHERE city = (?)", (city,))
+    rows = cursor.fetchone()
+
+    column_names = [column[0] for column in cursor.description]
+    dicty = dict(zip(column_names, rows))
+    for column, value in dicty.items():
+        print(f"{column}: {value}")
