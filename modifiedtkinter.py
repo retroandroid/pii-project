@@ -1,64 +1,18 @@
 from tkinter import ttk
 from PIL import Image, ImageTk
 import ttkbootstrap as tb
+import threading
+
 # Create the root window
 # Create the root window
 root = tb.Window(themename="morph")
+root.resizable(False, False)
 root.geometry('1920x1080')
 root.configure(bg='#F6FAFE')
 image_label = None
 text_label = []
 last_button = None
 resize_id = None
-def resize_image(event=None):
-    global prev_width, prev_height, resize_id
-
-    # Cancel the previous resize operation, if any
-    if resize_id is not None:
-        root.after_cancel(resize_id)
-
-    # Schedule a new resize operation
-    resize_id = root.after(100, start_resize_thread)
-
-def start_resize_thread():
-    # Start a new thread to perform the resize
-    threading.Thread(target=perform_resize).start()
-
-def perform_resize():
-    global prev_width, prev_height, resize_id
-
-    # Get the new size of the window
-    window_width = root.winfo_width()
-    window_height = root.winfo_height()
-
-    # Only resize the image if the window size has changed by more than 10 pixels
-    if abs(window_width - prev_width) > 10 or abs(window_height - prev_height) > 10:
-        # Calculate the new size of the image
-        if prev_width > prev_height:
-            image_width = int(window_height * 0.75)
-            image_height = int(window_height * 0.75)
-        else:
-            image_width = int(window_width * 0.75)
-            image_height = int(window_width * 0.75)
-        if window_height > 800:
-            window_height = 800
-        if window_width > 1000:
-            window_width = 1000
-
-        resized_image = image.resize((image_width, image_height), Image.BILINEAR)
-        uplabel_resized = upbar.resize((image_width+1000, 100), Image.BILINEAR)
-        # Update the image in the label
-        uplabel.image = ImageTk.PhotoImage(uplabel_resized)
-        uplabel['image'] = uplabel.image
-        label.image = ImageTk.PhotoImage(resized_image)
-        label['image'] = label.image
-
-        # Update the previous size of the window
-        prev_width = window_width
-        prev_height = window_height
-
-    # Reset the resize_id
-    resize_id = None
 def update_color(event, label):
     for lbl in labels:
         if lbl != label:
@@ -80,13 +34,15 @@ def on_button_click(button):
         last_button = None
         return
     last_button = button
-    image2 = Image.open("Rectangle 2.png")  # Resize to 200x200
-    photo_image1 = ImageTk.PhotoImage(image2)
-    image_label = ttk.Label(root, image=photo_image1)
+    recimage = Image.open("Rectangle 2.png")  # Resize to 200x200
+    recimage = recimage.resize((800, 500), Image.BILINEAR)
+    photo_image = ImageTk.PhotoImage(recimage)
+    image_label = ttk.Label(root, image=photo_image)
+    image_label.image = photo_image  # Keep a reference to the image
     image_label.configure(background="#F6FAFE")
-    # Create a label for the image and place it in the frame
-    image_label.image = photo_image1  # Keep a reference to the image
-    image_label.place(relx=0.2, rely =0.25, anchor='center')
+# Create a label for the image and place it in the frame
+    image_label.place(relx=0.25, rely =0.25, anchor='center')
+# ...
 
 # Initialize the previous size of the window
 prev_width = root.winfo_width()
@@ -100,7 +56,11 @@ prev_height = root.winfo_height()
 
 # Load the image
 image = Image.open("pngtree-grey-lebanon-map-district-province-city-vector-picture-image_9437234.png")
-
+image=image.resize((800, 800), Image.BILINEAR)
+photo_image1 = ImageTk.PhotoImage(image)
+image_label1 = ttk.Label(root, image=photo_image1)
+image_label1.configure(background="#F6FAFE")
+image_label1.place(relx=0.75, rely=0.5, anchor='center') 
 # Create a label for the image and place it at the top right
 label = tb.Label(root)
 label.configure(background="#F6FAFE")
@@ -113,6 +73,7 @@ uplabel.place(relx=0.5, rely=0, anchor='center')
 
 coordinates = [(0.81, 0.18), (0.75, 0.27), (0.82, 0.4), (0.68, 0.5), (0.73, 0.61), (0.65, 0.745), (0.58, 0.76)]
 buttons_text = ['akkar','Tripoli','Baalbak','Mount Lebanon','bqaa','Nabatiye','Saida']
+
 
 # Create a list to store the label variables
 labels = []
@@ -135,8 +96,6 @@ label2.bind("<Button-1>", lambda event,lbl2 = label2:(update_color(event,lbl2),o
 label2.place(relx=0.6, rely=0.5)
 label2.config(background="#F6FAFE")
 labels.append(label2)
-root.bind('<Configure>', resize_image)
 
 # Call the resize_image function manually to resize the image to fit the window
-resize_image()
 root.mainloop()
