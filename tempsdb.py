@@ -42,3 +42,4 @@ def load_data(city):
     dicty = dict(zip(column_names, rows))
     for column, value in dicty.items():
         print(f"{column}: {value}")
+        print('\n')
