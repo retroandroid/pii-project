@@ -42,7 +42,7 @@ sidon_soup=""
 populations=""
 #list containing all the part names
 tempsoups=[akkar_soup,baalbak_soup,beirut_soup,bqaa_soups,  matn_soup,nabatieh_soup,tripoli_soup,sidon_soup,populations]
-names=["akaar","baalbak","beirut","bqaa","Mount Lebanon",'nabatieh','tripoli','South Lebanon']
+names=["akaar","baalbak","beirut","bqaa","Matn",'nabatieh','tripoli','Saida']
 #converting them to soups(using the lxml library so that i can access them easily)
 for data in range(len(weather_data)):
     tempsoups[data]=BeautifulSoup(weather_data[data],'lxml')
@@ -105,10 +105,13 @@ def itemstorer():
         sub.append(humid)
         #precipitation
         sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
-        heat_index1 = int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
+        heat_index1=int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
         sub.append(heat_index1)
         sub.append(int(fahrenheit_to_celcius(heat_index1)))
+        
         sub.append(int(x[i].replace(",","")))
         b.write(str(sub)+"\n")
     b.close()
 itemstorer()
+with open('base.txt','r') as b:
+    print(b.read())
