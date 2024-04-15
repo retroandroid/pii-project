@@ -42,7 +42,7 @@ sidon_soup=""
 populations=""
 #list containing all the part names
 tempsoups=[akkar_soup,baalbak_soup,beirut_soup,bqaa_soups,  matn_soup,nabatieh_soup,tripoli_soup,sidon_soup,populations]
-names=["akaar","baalbak","beirut","bqaa","Matn",'nabatieh','tripoli','Saida']
+names=["akaar","baalbak","beirut","bqaa","Mount Lebanon",'nabatieh','tripoli','South Lebanon']
 #converting them to soups(using the lxml library so that i can access them easily)
 for data in range(len(weather_data)):
     tempsoups[data]=BeautifulSoup(weather_data[data],'lxml')
