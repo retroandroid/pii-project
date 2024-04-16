@@ -99,13 +99,13 @@ def itemstorer():
         sub=[]
         sub.append(names[i])
         temp=tempsoups[i].find('span',class_="DailyContent--temp--1s3a7 DailyContent--tempN--33RmW").text
-        sub.append(f'{temp}C / {str(fahrenheit_to_celcius(int(temp[0:-1])))}°F')
+        sub.append(f'{str(fahrenheit_to_celcius(int(temp[0:-1])))}C / {temp}°F')
         humid=tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text
         sub.append(humid)
         #precipitation
         sub.append(tempsoups[i].find('span',class_="DetailsTable--value--2YD0-").text)
         heat_index1=int(heat_index(int(temp[0:-1]),int(humid[0:-1])/100))
-        sub.append(f'{heat_index1}°C / {str(fahrenheit_to_celcius(heat_index1))}°F')
+        sub.append(f'{str(fahrenheit_to_celcius(heat_index1))}°C / {heat_index1}°F')
         sub.append(int(x[i].replace(",","")))
         b.write(str(sub)+"\n")
     b.close()
