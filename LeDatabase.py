@@ -1,7 +1,7 @@
 import sqlite3
 import ast
-import webscrapper
-webscrapper.itemstorer()
+import webscraper
+webscraper.itemstorer()
 
 with open('base.txt', 'r') as f:
     contents = f.readlines()
@@ -9,7 +9,7 @@ with open('base.txt', 'r') as f:
 listy = [i for i in map(ast.literal_eval, contents)]
 data = [tuple(j) for j in listy]
 
-connection = sqlite3.connect('temps.db')
+connection = sqlite3.connect('LeDatabase.db')
 c = connection.cursor()
 
 c.execute('DROP TABLE IF EXISTS stats')
@@ -31,7 +31,7 @@ connection.commit()
 connection.close()
 
 def load_data(city):
-    connection = sqlite3.connect('temps.db')
+    connection = sqlite3.connect('LeDatabase.db')
     cursor = connection.cursor()
 
     cursor.execute("SELECT * FROM stats WHERE city = (?)", (city,))
@@ -46,7 +46,7 @@ def load_data(city):
 
 
 def filter(stat):
-    connection = sqlite3.connect('temps.db')
+    connection = sqlite3.connect('LeDatabase.db')
     cursor = connection.cursor()
     
     cursor.execute(f'SELECT city, "{stat}" FROM stats')
