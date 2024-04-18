@@ -1,5 +1,5 @@
-import ast
 import sqlite3
+import ast
 import webscrapper
 webscrapper.itemstorer()
 
@@ -17,17 +17,15 @@ c.execute('DROP TABLE IF EXISTS stats')
 stats = """
     CREATE TABLE IF NOT EXISTS stats(
     'City' TEXT,
-    'Temperature in Fahrenheit' TEXT,
-    'Temperature in Celcius' TEXT,
+    'Temperature' TEXT,
     'Humidity' TEXT,
     'Chance of Precipitation' TEXT,
-    'Heat Index in Fahrenheit' INTEGER,
-    'Heat Index in Celcius' INTEGER,
+    'Heat Index' TEXT,
     'Population' INTEGER
 );"""
 
 c.execute(stats)
-c.executemany('INSERT INTO stats VALUES (?,?,?,?,?,?,?,?)',data)
+c.executemany('INSERT INTO stats VALUES (?,?,?,?,?,?)',data)
 
 connection.commit()
 connection.close()
@@ -35,10 +33,25 @@ connection.close()
 def load_data(city):
     connection = sqlite3.connect('temps.db')
     cursor = connection.cursor()
+
     cursor.execute("SELECT * FROM stats WHERE city = (?)", (city,))
     rows = cursor.fetchone()
 
     column_names = [column[0] for column in cursor.description]
     dicty = dict(zip(column_names, rows))
+
     for column, value in dicty.items():
         print(f"{column}: {value}")
+        print('\n')
+
+
+def filter(stat):
+    connection = sqlite3.connect('temps.db')
+    cursor = connection.cursor()
+    
+    cursor.execute(f'SELECT city, "{stat}" FROM stats')
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(f"{row[0]}: {row[1]}")
+        print('\n')
