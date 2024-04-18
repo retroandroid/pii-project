@@ -5,8 +5,8 @@ import tempsdb
 import io
 import contextlib
 from tkinter import font
-# Create the root window
-# Create the root window
+
+
 root = tb.Window(themename="morph")
 root.geometry('1920x1080')
 root.configure(bg='#F6FAFE')
@@ -36,7 +36,6 @@ pop_label = None
 rain_label = None
 temp_label = None
 
-# Initialize the previous size of the window
 
 image = Image.open(r"images\light\pngtree-grey-lebanon-map-district-province-city-vector-picture-image_9437234light.png")
 image=image.resize((800, 800), Image.BILINEAR)
@@ -44,8 +43,6 @@ photo_image1 = ImageTk.PhotoImage(image)
 image_label1 = ttk.Label(root, image=photo_image1)
 image_label1.configure(background="#F6FAFE")
 image_label1.place(relx=0.75, rely=0.5, anchor='center') 
-# Create a label for the image and place it at the top right
-# Bind the resize_image function to the <Configure> event of the window
 lightimage=Image.open(r"images\light\group 8light.png")
 light_image = ImageTk.PhotoImage(lightimage)
 lightlabel=tb.Label(root,image=light_image)
@@ -55,7 +52,6 @@ lightlabel.configure(background="#F6FAFE")
 coordinates = [(0.81, 0.2), (0.75, 0.3), (0.85, 0.35), (0.653, 0.53), (0.74, 0.55), (0.65, 0.73), (0.58, 0.76)]
 buttons_text = ['akaar','tripoli','baalbak','Mount Lebanon','bqaa','nabatieh','South Lebanon']
 
-# Create a list to store the label variables
 class ToolTip:
     def __init__(self, widget, text,background_color,foreground_color):
         self.widget = widget
@@ -82,19 +78,11 @@ class ToolTip:
             self.tooltip.destroy()
             self.tooltip = None
 
-
 labels = []
-# Create a style
-
 for i, ((x, y), text) in enumerate(zip(coordinates, buttons_text)):
-    # Create the label with the "Black.TLabel" style
     label1 = tb.Label(root, text=text, style="Black.TLabel", font=("Quincy", 16))
-
-    # Bind the update_color function to the label click event
     label1.bind("<Button-1>", lambda event,lbl = label1: (update_color(event,lbl),on_button_click(lbl)))
     label1.place(relx=x, rely=y)
-
-    # Add the label to the list
     labels.append(label1)
 
 
@@ -103,18 +91,14 @@ label2.bind("<Button-1>", lambda event,lbl2 = label2:(update_color_beirut(event,
 label2.place(relx=0.62, rely=0.46)
 labels.append(label2)
 
-
-# Call the resize_image function manually to resize the image to fit the window
-task_bar = Image.open(r"images\light\Rectangle 1.png")  # Resize to 200x200
+task_bar = Image.open(r"images\light\Rectangle 1.png")
 task_bar1 = task_bar.resize((3200,200))
 photo_task = ImageTk.PhotoImage(task_bar1)
     
 image_label2 = ttk.Label(root, image=photo_task)
 image_label2.configure(background="#F6FAFE")
-    # Create a label for the image and place it in the frame
-image_label2.image = photo_task  # Keep a reference to the image
+image_label2.image = photo_task
 image_label2.place(relx=0.2, rely =0.01, anchor='center')
-        # Redirect stdout to a string buffer
 
 filter_button = Image.open(r"images\light\group1light.png")
 photo_filter = ImageTk.PhotoImage(filter_button)
@@ -122,33 +106,24 @@ photo_filter = ImageTk.PhotoImage(filter_button)
 image_label3 = ttk.Label(root, image=photo_filter)
 image_label3.configure(background="#222831")
 
-image_label3.image = photo_filter  # Keep a reference to the image
+image_label3.image = photo_filter
 image_label3.place(relx=0.96, rely =0.01, anchor='ne')
-        # Redirect stdout to a string buffer
-
-#image_paths = ["3953532.png","humidity.png,""multiple-users-silhouette.png","rainy.png","temperature.png"]
-
 
 image_labels = []
 labels1 =[]
 
 def increase_size(event):
-    # Get the label from the event
     labels = event.widget
-
-    # Increase the font size
     current_font = font.Font(font=labels['font'])
     current_size = current_font.actual()['size']
-    font_size = min(int(current_size) + 2, 30)  # Increase the font size by 2, but don't go above 30
+    font_size = min(int(current_size) + 2, 30)
     labels.configure(font=('Quincy', font_size))
 
 def decrease_size(event):
-     # Get the label from the event
     labels = event.widget
-    # Increase the font size
     current_font = font.Font(font=labels['font'])
     current_size = current_font.actual()['size']
-    font_size = min(int(current_size) - 2, 30)  # Increase the font size by 2, but don't go above 30
+    font_size = min(int(current_size) - 2, 30)
     labels.configure(font=('Quincy', font_size))
 
 def update_color(event, label):
@@ -170,10 +145,9 @@ def update_color_beirut (event, label):
     if label.cget('style') == 'Blackbeirut.TLabel':
         label.config(style="Redbeirut.TLabel")
     else:
-        label.config(style="Blackbeirut.TLabel")  # Change to default color'''
+        label.config(style="Blackbeirut.TLabel")
 
 def on_button_click(button):
-    # Destroy the old frame
     global image_label,text_labels,last_button,output_label,info_label,image_labels,images_displayed,rectangle_images,labels1
     images_displayed = False
     for image in image_labels:
@@ -202,28 +176,27 @@ def on_button_click(button):
     
     last_button = button
     if dark:
-        recimage = Image.open(r"images\dark\Rectangle 2dark.png")  # Resize to 200x200
+        recimage = Image.open(r"images\dark\Rectangle 2dark.png")
         photo_image = ImageTk.PhotoImage(recimage)
         image_label = ttk.Label(root, image=photo_image)
-        image_label.image = photo_image  # Keep a reference to the image
+        image_label.image = photo_image
         image_label.configure(background="#222831")
     else:
-        recimage = Image.open(r"images\light\Rectangle 2.png")  # Resize to 200x200
+        recimage = Image.open(r"images\light\Rectangle 2.png")
         photo_image = ImageTk.PhotoImage(recimage)
         image_label = ttk.Label(root, image=photo_image)
-        image_label.image = photo_image  # Keep a reference to the image
+        image_label.image = photo_image
         image_label.configure(background="#F6FAFE")
     image_label.place(relx=0.25, rely =0.4, anchor='center')
 
     rectangle_images.append(image_label)
-        # Redirect stdout to a string buffer
+
     def get_data(button_text):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
             tempsdb.load_data(button_text)
         return buffer.getvalue()
     data = get_data(button.cget('text'))
-    # Display the data
     output_label = ttk.Label(root, text=data,font=("Quincy",20))
     if dark:
         output_label.configure(background="#76ABAE",foreground="#222831")
@@ -234,9 +207,6 @@ def on_button_click(button):
     labels1.append(output_label)
 
 def on_image_click(event, image_path,button):
-    # Fetch specific information from the database based on the image_path
-  # Fetch specific information from the database based on the image_path
-    # This is just a placeholder. Replace it with your actual database query.
     global info_label,filter_image_label,rectangle_images,last_button,previous_path
     info_label = ttk.Label(root)
     
@@ -254,9 +224,7 @@ def on_image_click(event, image_path,button):
             filter_image_label = ttk.Label(root, image=photo_image1)
             filter_image_label.configure(background="#222831")
         
-        
-        # Create a label for the image and place it in the frame
-        filter_image_label.image = photo_image1  # Keep a reference to the image
+        filter_image_label.image = photo_image1
         filter_image_label.place(relx=0.245, rely =0.45, anchor='center')
         rectangle_images.append(filter_image_label)
     elif filter_image_label is not None and previous_path == image_path:
@@ -287,7 +255,6 @@ def on_image_click(event, image_path,button):
             info_label.configure(background="#222831",foreground="#F6FAFE")
         info_label.configure(text = info)
         info_label.place(relx=0.25, rely=0.45, anchor='center') 
-        # Display the information
         labels1.append(info_label)
     if previous_path==image_path:
         previous_path=None
@@ -316,7 +283,6 @@ def change_image(event=None):
         last_button = None
     
     if images_displayed:
-        # Hide the images
         for label in image_labels:
             label.destroy()
             label = None
@@ -326,8 +292,6 @@ def change_image(event=None):
         labels1.clear()  
         images_displayed = False
     else:
-        # Show the images
-             # Show the images
         if not dark:
             image4 = Image.open(r"images\light\3953532light.png")
             image5 = Image.open(r"images\light\humiditylight.png")
@@ -341,14 +305,11 @@ def change_image(event=None):
             image7 = Image.open(r"images\dark\rainy.png")
             image8 = Image.open(r"images\dark\temperature.png")
 
-        
-
-
         image_resized = image4.resize((60,60))
         photo_imagess = ImageTk.PhotoImage(image_resized)
         heat_label = tb.Label(root, image=photo_imagess)
-        heat_label.image = photo_imagess  # Keep a reference to the image
-        heat_label.place(relx=0.5, rely=0.01, anchor='ne')  # Adjust the position as needed
+        heat_label.image = photo_imagess
+        heat_label.place(relx=0.5, rely=0.01, anchor='ne')
         heat_label.bind("<Button-1>", lambda event,lbl1=heat_label, path="Heat Index": (on_image_click(event, path,lbl1)))
         
         if dark == True:
@@ -368,8 +329,8 @@ def change_image(event=None):
         image_resized = image5.resize((60,60))
         photo_imagess = ImageTk.PhotoImage(image_resized)
         humid_label = tb.Label(root, image=photo_imagess)
-        humid_label.image = photo_imagess  # Keep a reference to the image
-        humid_label.place(relx=0.4, rely=0.01, anchor='ne')  # Adjust the position as needed
+        humid_label.image = photo_imagess
+        humid_label.place(relx=0.4, rely=0.01, anchor='ne')
         humid_label.bind("<Button-1>", lambda event,lbl2=humid_label ,path="Humidity": (on_image_click(event, path,lbl2)))
         
         tooltip = ToolTip(humid_label, "Humidity",background_color,foreground_color)
@@ -381,8 +342,8 @@ def change_image(event=None):
         image_resized = image6.resize((60,60))
         photo_imagess = ImageTk.PhotoImage(image_resized)
         pop_label = tb.Label(root, image=photo_imagess)
-        pop_label.image = photo_imagess  # Keep a reference to the image
-        pop_label.place(relx=0.3, rely=0.01, anchor='ne')  # Adjust the position as needed
+        pop_label.image = photo_imagess
+        pop_label.place(relx=0.3, rely=0.01, anchor='ne')
         pop_label.bind("<Button-1>", lambda event,lbl3=pop_label, path="Population": (on_image_click(event, path,lbl3)))
         
         tooltip = ToolTip(pop_label, "Population",background_color,foreground_color)
@@ -394,8 +355,8 @@ def change_image(event=None):
         image_resized = image7.resize((60,60))
         photo_imagess = ImageTk.PhotoImage(image_resized)
         rain_label = tb.Label(root, image=photo_imagess)
-        rain_label.image = photo_imagess  # Keep a reference to the image
-        rain_label.place(relx=0.2, rely=0.01, anchor='ne')  # Adjust the position as needed
+        rain_label.image = photo_imagess
+        rain_label.place(relx=0.2, rely=0.01, anchor='ne')
         rain_label.bind("<Button-1>", lambda event,lbl4=rain_label ,path="Chance of Precipitation": (on_image_click(event, path,lbl4)))
         image_labels.append(rain_label)
         images_displayed = True
@@ -407,8 +368,8 @@ def change_image(event=None):
         image_resized = image8.resize((60,60))
         photo_imagess = ImageTk.PhotoImage(image_resized)
         temp_label = tb.Label(root, image=photo_imagess)
-        temp_label.image = photo_imagess  # Keep a reference to the image
-        temp_label.place(relx=0.1, rely=0.01, anchor='ne')  # Adjust the position as needed
+        temp_label.image = photo_imagess
+        temp_label.place(relx=0.1, rely=0.01, anchor='ne')
         temp_label.bind("<Button-1>", lambda event,lbl5=temp_label ,path="Temperature": (on_image_click(event, path,lbl5)))
     
         tooltip = ToolTip(temp_label, "Temperature",background_color,foreground_color)
@@ -441,17 +402,17 @@ def darkmode():
         dark=True
         if image_label is not None:
             if image_label.winfo_exists():
-                recimage = Image.open(r"images\dark\Rectangle 2dark.png")  # Resize to 200x200
+                recimage = Image.open(r"images\dark\Rectangle 2dark.png")
                 recimage = recimage.resize((600, 500), Image.BILINEAR)
                 photo_image = ImageTk.PhotoImage(recimage)
                 image_label.configure(image= photo_image,background='#222831')
-                image_label.image = photo_image  # Keep a reference to the image
+                image_label.image = photo_image
         if filter_image_label is not None: 
             if filter_image_label.winfo_exists():
-                recimage = Image.open(r"images\dark\Rectangle 2dark.png")  # Resize to 200x200
+                recimage = Image.open(r"images\dark\Rectangle 2dark.png")
                 photo_image = ImageTk.PhotoImage(recimage)
                 filter_image_label.configure(image= photo_image,background='#222831')
-                filter_image_label.image = photo_image  # Keep a reference to the image
+                filter_image_label.image = photo_image
         root.configure(bg='#222831')
         mapimage=Image.open(r"images\dark\pngtree-grey-lebanon-map-district-province-city-vector-picture-image_9437234.png")
         mapimage=mapimage.resize((800, 800), Image.BILINEAR)
@@ -461,8 +422,8 @@ def darkmode():
         lightlabel.configure(background='#222831')
         lightimage=Image.open(r"images\dark\Group 8.png")
         light_image = ImageTk.PhotoImage(lightimage)
-        lightlabel.configure(image=light_image,background='#222831')  # Change the image
-        lightlabel.image = light_image  # Keep a reference to the image
+        lightlabel.configure(image=light_image,background='#222831')
+        lightlabel.image = light_image
         task_bar=Image.open(r"images\dark\Path 4.png")
         task_bar1 = task_bar.resize((3200,200))
         photo_task = ImageTk.PhotoImage(task_bar1)
@@ -471,7 +432,7 @@ def darkmode():
         filterimage=Image.open(r"images\dark\Group 1.png")
         filterimage=ImageTk.PhotoImage(filterimage)
         image_label3.configure(background="#76ABAE",image=filterimage)
-        image_label3.image = filterimage  # Keep a reference to the image
+        image_label3.image = filterimage
         image_label3.place(relx=0.96, rely =0.01, anchor='ne')
         for i in labels1:
             if i is not None:
@@ -501,17 +462,17 @@ def darkmode():
         dark=False
         if image_label is not None:
             if image_label.winfo_exists():
-                recimage = Image.open(r"images\light\Rectangle 2.png")  # Resize to 200x200
+                recimage = Image.open(r"images\light\Rectangle 2.png")
                 recimage = recimage.resize((600, 500), Image.BILINEAR)
                 photo_image = ImageTk.PhotoImage(recimage)
                 image_label.configure(image= photo_image,background='#F6FAFE')
-                image_label.image = photo_image  # Keep a reference to the image
+                image_label.image = photo_image
         if filter_image_label is not None:
             if filter_image_label.winfo_exists():
-                recimage = Image.open(r"images\light\Rectangle 2.png")  # Resize to 200x200
+                recimage = Image.open(r"images\light\Rectangle 2.png")
                 photo_image = ImageTk.PhotoImage(recimage)
                 filter_image_label.configure(image= photo_image,background='#F6FAFE')
-                filter_image_label.image = photo_image  # Keep a reference to the image
+                filter_image_label.image = photo_image
         mapimage=Image.open(r"images\light\pngtree-grey-lebanon-map-district-province-city-vector-picture-image_9437234light.png")
         mapimage=mapimage.resize((800, 800), Image.BILINEAR)
         mapper=ImageTk.PhotoImage(mapimage)
@@ -521,8 +482,8 @@ def darkmode():
         image_label1.configure(background='#F6FAFE')   
         lightimage=Image.open(r"images\light\Group 8light.png")
         light_image = ImageTk.PhotoImage(lightimage)
-        lightlabel.configure(image=light_image,background='#F6FAFE')  # Change the image
-        lightlabel.image = light_image # Keep a reference to the image
+        lightlabel.configure(image=light_image,background='#F6FAFE')
+        lightlabel.image = light_image
         task_bar=Image.open(r"images\light\Rectangle 1.png")
         task_bar1 = task_bar.resize((3200,200))
         photo_task = ImageTk.PhotoImage(task_bar1)
@@ -531,7 +492,7 @@ def darkmode():
         filterimage=Image.open(r"images\light\group1light.png")
         filterimage=ImageTk.PhotoImage(filterimage)
         image_label3.configure(background="#222831",image=filterimage)
-        image_label3.image = filterimage  # Keep a reference to the image
+        image_label3.image = filterimage
         image_label3.place(relx=0.96, rely =0.01, anchor='ne')
 
         for i in labels1:
@@ -558,6 +519,5 @@ image_label3.bind("<Button-1>",change_image)
 for label in labels:
     label.bind("<Enter>", increase_size)
     label.bind("<Leave>", decrease_size)
-
 
 root.mainloop()
