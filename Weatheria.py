@@ -1,7 +1,7 @@
 from tkinter import ttk
 from PIL import Image, ImageTk
 import ttkbootstrap as tb
-import tempsdb
+import LeDatabase
 import io
 import contextlib
 from tkinter import font
@@ -194,7 +194,7 @@ def on_button_click(button):
     def get_data(button_text):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            tempsdb.load_data(button_text)
+            LeDatabase.load_data(button_text)
         return buffer.getvalue()
     data = get_data(button.cget('text'))
     output_label = ttk.Label(root, text=data,font=("Quincy",20))
@@ -237,7 +237,7 @@ def on_image_click(event, image_path,button):
     def filter_data(button_image):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            tempsdb.filter(button_image)
+            LeDatabase.filter(button_image)
         return buffer.getvalue()
     info = filter_data(image_path)
     if info_label is not None and previous_path == image_path:
