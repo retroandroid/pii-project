@@ -40,7 +40,7 @@ sidon_soup=""
 populations=""
 
 tempsoups=[akkar_soup,baalbak_soup,beirut_soup,bqaa_soups,matn_soup,nabatieh_soup,tripoli_soup,sidon_soup,populations]
-names=["akaar","baalbak","beirut","bqaa","Mount Lebanon",'nabatieh','tripoli','South Lebanon']
+names=["Aakar","Baalbak","Beirut","Bqaa","Mount Lebanon",'Nabatieh','Tripoli','South Lebanon']
 
 for data in range(len(weather_data)):
     tempsoups[data]=BeautifulSoup(weather_data[data],'lxml')
