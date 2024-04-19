@@ -250,7 +250,7 @@ def on_image_click(event, image_path,button):
             i=None
         info_label = ttk.Label(root,font=("Quincy",16))
         if dark:
-        info_label.configure(background="#76ABAE",foreground="#222831")
+            info_label.configure(background="#76ABAE",foreground="#222831")
         else:
             info_label.configure(background="#222831",foreground="#F6FAFE")
         info_label.configure(text = info)
